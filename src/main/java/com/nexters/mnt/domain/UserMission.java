@@ -1,5 +1,6 @@
 package com.nexters.mnt.domain;
 
+import lombok.Data;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -10,7 +11,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "user_mission_TB")
-@Getter
+@Data
 public class UserMission {
 
     @Id

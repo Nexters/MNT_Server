@@ -1,7 +1,9 @@
 package com.nexters.mnt.domain;
 
 
+import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -9,11 +11,10 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "user_TB")
-@Getter
+@Data
 public class User {
 
     @Id
-    @GeneratedValue(strategy = IDENTITY)
     @Column(name="id")
     private String id;
 
