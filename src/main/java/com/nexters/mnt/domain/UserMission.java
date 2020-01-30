@@ -2,6 +2,7 @@ package com.nexters.mnt.domain;
 
 import lombok.Data;
 import lombok.Getter;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 
@@ -31,7 +32,11 @@ public class UserMission {
     @Column(name = "user_done")
     private Integer userDone;
 
+    @LastModifiedDate
     @Column(name = "user_done_time")
     private Date userDoneTime;
+
+    @Column(name = "mission_img")
+    private String missionImg;
 
 }

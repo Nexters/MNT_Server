@@ -1,11 +1,14 @@
 package com.nexters.mnt.domain;
 
+import com.nexters.mnt.domain.User;
 import lombok.Data;
 import lombok.Getter;
+import org.springframework.data.annotation.ReadOnlyProperty;
 
 import javax.persistence.*;
 
 import java.sql.Date;
+import java.util.List;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -14,9 +17,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Data
 public class Room {
 
-
     @Id
-    @GeneratedValue(strategy = IDENTITY)
     @Column(name="id")
     private Long id;
 
@@ -34,6 +35,9 @@ public class Room {
 
     @Column(name = "is_done")
     private Integer isDone;
+
+    @Column(name = "is_start")
+    private Integer isStart;
 
 
 }

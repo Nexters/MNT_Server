@@ -2,12 +2,10 @@ package com.nexters.mnt.domain;
 
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import org.springframework.data.annotation.ReadOnlyProperty;
 
 import javax.persistence.*;
-
-import static javax.persistence.GenerationType.IDENTITY;
+import java.util.List;
 
 @Entity
 @Table(name = "user_TB")
@@ -23,5 +21,4 @@ public class User {
 
     @Column(name = "profile_pic")
     private String profilePic;
-
 }

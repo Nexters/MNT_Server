@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
-class MainControllerTest {
+class RoomControllerTest {
 
     @Autowired
     private UserRepository userRepository;
