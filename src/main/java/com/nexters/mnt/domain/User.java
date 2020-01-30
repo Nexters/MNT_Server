@@ -1,19 +1,18 @@
 package com.nexters.mnt.domain;
 
 
-import lombok.Getter;
+import lombok.Data;
+import org.springframework.data.annotation.ReadOnlyProperty;
 
 import javax.persistence.*;
-
-import static javax.persistence.GenerationType.IDENTITY;
+import java.util.List;
 
 @Entity
 @Table(name = "user_TB")
-@Getter
+@Data
 public class User {
 
     @Id
-    @GeneratedValue(strategy = IDENTITY)
     @Column(name="id")
     private String id;
 
@@ -22,5 +21,4 @@ public class User {
 
     @Column(name = "profile_pic")
     private String profilePic;
-
 }
