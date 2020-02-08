@@ -6,6 +6,7 @@ import com.nexters.mnt.domain.User;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 
 import javax.persistence.*;
@@ -18,6 +19,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Entity
 @Table(name = "manitto_TB")
 @Data
+@NoArgsConstructor
 public class Manitto {
 
     @Id
@@ -41,8 +43,6 @@ public class Manitto {
     @Column(name = "is_creater")
     private int isCreater;
 
-    public Manitto() {
-    }
 
     public Manitto(User user, Room room, int isCreater){
         this.isCreater = isCreater;

@@ -29,4 +29,7 @@ public interface ManittoRepository extends JpaRepository<Manitto, Long> {
 
     @Query(value = "select m from Manitto m where m.room.id = :roomId and m.user.id = :userId")
     Manitto findByRoomAndUser(@Param("userId")String userId, @Param("roomId")Long roomId);
+
+    @Query("delete from Manitto where room.id = :roomId and user.id = :userId")
+    void deleteByRoomIdAndUser(@Param("roomId") Long roomId, @Param("userId") String userId);
 }

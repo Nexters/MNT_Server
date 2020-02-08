@@ -18,7 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-public class MainController {
+public class RoomController {
 
 
     @Autowired
@@ -30,8 +30,6 @@ public class MainController {
     @Autowired
     private RoomService roomService;
 
-    @Autowired
-    private MissionService missionService;
 
     @ApiOperation(value = "카카오 회원가입")
     @RequestMapping(value = "/user/sign-up", method = RequestMethod.POST)
@@ -55,7 +53,7 @@ public class MainController {
     @ApiOperation(value = "방 만들기", notes = "방 코드를 응답값으로 보냄")
     @RequestMapping(value = "/room/make", method = RequestMethod.POST)
     @ResponseBody
-    public ApiResponse makeRoom(@RequestBody Room room, @RequestParam("userId") String userId){
+    public ApiResponse<Long> makeRoom(@RequestBody Room room, @RequestParam("userId") String userId){
         return roomService.makeRoom(room, userId);
     }
 
@@ -85,19 +83,18 @@ public class MainController {
         roomService.startRoom(roomId);
     }
 
+    @ApiOperation(value = "사용자의 마니또 정보 가져오기")
     @RequestMapping(value = "/user/manitto", method = RequestMethod.GET)
     public ApiResponse<User> getManitto(@RequestParam("roomId") Long roomId, @RequestParam("userId")  String userId){
         return roomService.getMyManitto(userId, roomId);
     }
 
-    @RequestMapping(value = "/mission/list/{roomId}", method = RequestMethod.GET)
-    public List<UserMission> getTimeLine(@PathVariable Long roomId){
-        return missionService.getTimeLine(roomId);
+    @ApiOperation(value = "사용자 방에서 삭제하기")
+    @RequestMapping(value = "/room/user", method = RequestMethod.DELETE)
+    public void deleteUserFromRoom(@RequestParam("roomId") Long roomId, @RequestParam("userId") String userId){
+        roomService.removeUserFromRoom(roomId, userId);
     }
 
-    @RequestMapping(value = "/mission/list/order-mission/{roomId}", method = RequestMethod.GET)
-    public List<UserMission> getMissionGroupBy(@PathVariable Long roomId){
-        return missionService.getTimeLine(roomId);
-    }
+
 
 }

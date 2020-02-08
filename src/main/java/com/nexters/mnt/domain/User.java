@@ -21,4 +21,7 @@ public class User {
 
     @Column(name = "profile_pic")
     private String profilePic;
+
+    @Column(name = "fcm_token")
+    private String fcmToken;
 }

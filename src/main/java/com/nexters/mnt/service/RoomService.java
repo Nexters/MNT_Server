@@ -23,8 +23,7 @@ public class RoomService {
     private final RoomRepository roomRepository;
     private final ManittoRepository manittoRepository;
     private final ManittoMapper manittoMapper;
-    @PersistenceContext
-    EntityManager entityManager;
+
 
     public RoomService(RoomRepository roomRepository, ManittoRepository manittoRepository, ManittoMapper manittoMapper) {
         this.roomRepository = roomRepository;
@@ -67,6 +66,10 @@ public class RoomService {
     public void removeRoom(Long roomId){
         manittoRepository.deleteByRoom(roomId);
         roomRepository.deleteById(roomId);
+    }
+
+    public void removeUserFromRoom(Long roomId, String userId){
+        manittoRepository.deleteByRoomIdAndUser(roomId, userId);
     }
 
     public ApiResponse<List<Manitto>> getUserList(Long roomId){
