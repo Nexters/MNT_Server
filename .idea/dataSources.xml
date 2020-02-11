@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="mntDB@localhost" uuid="b6a09974-6873-4b21-b67a-252548e485e6">
+    <data-source source="LOCAL" name="mnt@database-2.cj04ohqp74wq.ap-northeast-2.rds.amazonaws.com" uuid="b6a09974-6873-4b21-b67a-252548e485e6">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306/mntDB</jdbc-url>
+      <jdbc-url>jdbc:mysql://database-2.cj04ohqp74wq.ap-northeast-2.rds.amazonaws.com:3306/mnt</jdbc-url>
       <driver-properties>
         <property name="serverTimezone" value="UTC" />
       </driver-properties>

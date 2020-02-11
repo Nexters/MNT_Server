@@ -17,7 +17,7 @@ import java.util.Objects;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Table(name = "manitto_TB")
+@Table(name = "manitto_tb")
 @Data
 @NoArgsConstructor
 public class Manitto {
@@ -28,12 +28,12 @@ public class Manitto {
     private Long id;
 
     @ManyToOne(targetEntity = Room.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_TB_id")
+    @JoinColumn(name = "room_tb_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer"})
     private Room room;
 
     @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_TB_id")
+    @JoinColumn(name = "user_tb_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer"})
     private User user;
 

@@ -13,7 +13,7 @@ import java.util.List;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Table(name = "mission_TB")
+@Table(name = "mission_tb")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,7 +24,7 @@ public class Mission {
     @Column(name="id")
     private Long id;
 
-    @Column(name = "room_TB_id")
+    @Column(name = "room_tb_id")
     private Long roomId;
 
     @Column(name = "img_able")
@@ -34,7 +34,7 @@ public class Mission {
     private String name;
 
     @OneToMany(targetEntity = UserMission.class, cascade = CascadeType.ALL )
-    @JoinColumn(name = "mission_TB_id")
+    @JoinColumn(name = "mission_tb_id")
     @Where(clause = "user_done = 1")
     List<UserMission> userMissions;
 

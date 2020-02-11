@@ -15,7 +15,7 @@ import java.sql.Date;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Table(name = "user_mission_TB")
+@Table(name = "user_mission_tb")
 @Data
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
@@ -26,14 +26,14 @@ public class UserMission {
     @Column(name="id")
     private Long id;
 
-    @Column(name="room_TB_id")
+    @Column(name="room_tb_id")
     private Long roomId;
 
-    @Column(name="user_TB_id")
+    @Column(name="user_tb_id")
     private String userId;
 
     @ManyToOne(targetEntity = Mission.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "mission_TB_id", referencedColumnName = "id")
+    @JoinColumn(name = "mission_tb_id", referencedColumnName = "id")
     private Mission missionId;
 
     @Column(name = "user_done")

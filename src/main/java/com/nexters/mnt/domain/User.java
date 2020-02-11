@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "user_TB")
+@Table(name = "user_tb", schema = "mnt")
 @Data
 public class User {
 

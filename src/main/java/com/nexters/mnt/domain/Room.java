@@ -13,7 +13,7 @@ import java.util.List;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Table(name = "room_TB")
+@Table(name = "room_tb")
 @Data
 public class Room {
 
