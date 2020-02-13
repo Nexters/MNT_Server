@@ -34,7 +34,7 @@ public class RoomService {
 
 
     @Transactional
-    public ApiResponse makeRoom(Room room, String userId){
+    public ApiResponse<Long> makeRoom(Room room, String userId){
         StringBuilder stringBuilder = new StringBuilder();
         Long code = (long)0;
         do {
