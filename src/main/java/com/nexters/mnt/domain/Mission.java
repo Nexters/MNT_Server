@@ -1,9 +1,9 @@
 package com.nexters.mnt.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.*;
+import io.swagger.annotations.Example;
+import io.swagger.annotations.ExampleProperty;
+import lombok.*;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -17,6 +17,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 public class Mission {
 
     @Id
@@ -33,9 +34,9 @@ public class Mission {
     @Column(name = "name")
     private String name;
 
+    @JsonManagedReference
     @OneToMany(targetEntity = UserMission.class, cascade = CascadeType.ALL )
     @JoinColumn(name = "mission_tb_id")
-    @Where(clause = "user_done = 1")
     List<UserMission> userMissions;
 
 }

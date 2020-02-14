@@ -35,10 +35,10 @@ public class MissionService {
     }
 
     @Transactional
-    public void makeMission(Mission mission){
+    public ApiResponse<String> makeMission(Mission mission){
         List<Manitto> users = roomService.getUserList(mission.getRoomId()).getData();
         if(users == null){
-            return;
+            return new ApiResponse<>("", ApiStatus.DataNotFound);
         }
         List<UserMission> userMissionList  = new ArrayList<>();
         mission.setUserMissions(userMissionList);
@@ -46,6 +46,7 @@ public class MissionService {
             userMissionList.add(new UserMission(mission.getRoomId(), manitto.getUser().getId(), mission));
         }
         missionRepository.save(mission);
+        return new ApiResponse<>("", ApiStatus.Ok);
     }
 
     public ApiResponse<List<Mission>> getMissionGroupBy(Long roomId){

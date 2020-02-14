@@ -21,17 +21,17 @@ public class MissionController {
         return missionService.getTimeLine(roomId);
     }
 
-    @RequestMapping(value = "/mission/list/order-mission/{roomId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/list/order-mission/{roomId}", method = RequestMethod.GET)
     public ApiResponse<List<Mission>> getMissionGroupBy(@PathVariable Long roomId){
         return missionService.getMissionGroupBy(roomId);
     }
 
-    @RequestMapping(value = "/mission/make", method = RequestMethod.POST)
-    public void makeMission(@RequestBody Mission mission){
-        missionService.makeMission(mission);
+    @RequestMapping(value = "/make", method = RequestMethod.POST)
+    public ApiResponse<String> makeMission(@RequestBody Mission mission){
+        return missionService.makeMission(mission);
     }
 
-    @RequestMapping(value = "/mission/send", method = RequestMethod.POST)
+    @RequestMapping(value = "/send", method = RequestMethod.POST)
     public void sendMission(@RequestBody UserMission userMission, @RequestParam Long missionId){
         missionService.sendMission(userMission, missionId);
     }

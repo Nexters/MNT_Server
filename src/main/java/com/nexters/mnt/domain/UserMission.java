@@ -1,6 +1,9 @@
 package com.nexters.mnt.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -10,7 +13,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import javax.persistence.*;
 
-import java.sql.Date;
+
+import java.util.Date;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -18,6 +22,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Table(name = "user_mission_tb")
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode
 @EntityListeners(AuditingEntityListener.class)
 public class UserMission {
 
@@ -32,6 +37,7 @@ public class UserMission {
     @Column(name="user_tb_id")
     private String userId;
 
+    @JsonBackReference
     @ManyToOne(targetEntity = Mission.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "mission_tb_id", referencedColumnName = "id")
     private Mission missionId;

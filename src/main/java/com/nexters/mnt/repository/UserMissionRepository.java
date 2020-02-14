@@ -11,7 +11,8 @@ import java.util.List;
 
 public interface UserMissionRepository extends JpaRepository<UserMission, Long> {
 
-    List<UserMission> findByRoomIdAndUserDoneIsOrderByUserDoneTime(Long roomId, int userDone);
+    @Query("select u from UserMission u join fetch u.missionId where u.roomId = :roomId and u.userDone = :userDone order by u.userDoneTime")
+    List<UserMission> findByRoomIdAndUserDoneIsOrderByUserDoneTime(@Param(value = "roomId") Long roomId, @Param(value = "userDone") int userDone);
 
     @Transactional
     @Modifying
