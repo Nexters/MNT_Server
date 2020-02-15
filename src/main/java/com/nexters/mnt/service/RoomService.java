@@ -6,7 +6,9 @@ import com.nexters.mnt.controller.ApiStatus;
 import com.nexters.mnt.domain.*;
 import com.nexters.mnt.repository.ManittoRepository;
 import com.nexters.mnt.repository.RoomRepository;
+import com.nexters.mnt.repository.UserRepository;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -23,7 +25,8 @@ public class RoomService {
     private final RoomRepository roomRepository;
     private final ManittoRepository manittoRepository;
     private final ManittoMapper manittoMapper;
-
+    @Autowired
+    private UserRepository userRepository;
 
     public RoomService(RoomRepository roomRepository, ManittoRepository manittoRepository, ManittoMapper manittoMapper) {
         this.roomRepository = roomRepository;
@@ -82,8 +85,16 @@ public class RoomService {
 
     @Transactional
     public ApiResponse<Room> attendRoom(Long roomId, String userId){
-        if(roomRepository.findByIdAndIsStartAndIsDone(roomId, 0,0).orElse(null) == null)
+        Room room = null;
+        if((room = roomRepository.findByIdAndIsStartAndIsDone(roomId, 0,0).orElse(null)) == null)
             return new ApiResponse<>(null, ApiStatus.NotEstablishedRoom);
+
+        if(manittoRepository.findByRoomAndUser(userId, roomId).orElse(null) != null)
+            return new ApiResponse<>(null, ApiStatus.DuplicateRoom);
+
+        if(room.getMaxPeople() == manittoRepository.countByRoom(roomId))
+            return new ApiResponse<>(null, ApiStatus.FULL);
+
         manittoRepository.save(manittoMapper.mapFrom(roomId, userId, 0));
         return new ApiResponse<>(roomRepository.findById(roomId).get(), ApiStatus.Ok);
     }
@@ -105,8 +116,10 @@ public class RoomService {
         roomRepository.updateStartRoom(roomId);
     }
 
+    @Transactional
     public ApiResponse<User> getMyManitto(String userId, Long roomId){
-        return new ApiResponse<>(manittoRepository.findByRoomAndUser(userId, roomId).getUser(), ApiStatus.Ok);
+        String user = manittoRepository.findByRoomAndUser(userId, roomId).get().getManittoId();
+        return new ApiResponse<>(userRepository.findById(user).get(), ApiStatus.Ok);
     }
 
 

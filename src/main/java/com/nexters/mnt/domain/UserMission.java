@@ -34,8 +34,9 @@ public class UserMission {
     @Column(name="room_tb_id")
     private Long roomId;
 
-    @Column(name="user_tb_id")
-    private String userId;
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
+    @JoinColumn(name="user_tb_id")
+    private User userId;
 
     @JsonBackReference
     @ManyToOne(targetEntity = Mission.class, fetch = FetchType.LAZY)
@@ -55,7 +56,7 @@ public class UserMission {
     @Column(name = "content")
     private String content;
 
-    public UserMission(Long roomId, String userId, Mission missionId ){
+    public UserMission(Long roomId, User userId, Mission missionId ){
         this.roomId = roomId;
         this.userId = userId;
         this.missionId = missionId;

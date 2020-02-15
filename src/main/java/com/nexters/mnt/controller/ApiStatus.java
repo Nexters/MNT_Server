@@ -15,8 +15,9 @@ public enum ApiStatus {
 
     Ok("Success", HttpStatus.OK.value()),
     NotEstablishedRoom("유효하지 않은 방 입니다.", HttpStatus.BAD_REQUEST.value()),
-    DataNotFound("데이터가 없습니다.", HttpStatus.NOT_FOUND.value());
-
+    FULL("방의 인원이 최대 입니다.", HttpStatus.FORBIDDEN.value()),
+    DataNotFound("데이터가 없습니다.", HttpStatus.NOT_FOUND.value()),
+    DuplicateRoom("이미 참여하는 방 입니다.", HttpStatus.BAD_REQUEST.value());
     private String label;
     private int httpStatus;
 }
