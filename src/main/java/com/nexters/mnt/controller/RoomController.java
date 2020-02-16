@@ -79,8 +79,15 @@ public class RoomController {
 
     @ApiOperation(value = "방 시작하기")
     @RequestMapping(value = "/room/start/{roomId}", method = RequestMethod.GET)
-    public void startRoom(@PathVariable Long roomId){
-        roomService.startRoom(roomId);
+    public ApiResponse<String> startRoom(@PathVariable Long roomId){
+        return roomService.startRoom(roomId);
+    }
+
+
+    @ApiOperation(value = "방 종료하기")
+    @RequestMapping(value = "/room/end/{roomId}", method = RequestMethod.GET)
+    public void endRoom(@PathVariable Long roomId){
+        roomService.endRoom(roomId);
     }
 
     @ApiOperation(value = "사용자의 마니또 정보 가져오기")

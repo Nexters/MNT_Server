@@ -11,6 +11,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.annotation.Schedules;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -38,15 +40,17 @@ public class RoomService {
 
     @Transactional
     public ApiResponse<Long> makeRoom(Room room, String userId){
-        StringBuilder stringBuilder = new StringBuilder();
         Long code = (long)0;
         do {
+            StringBuilder stringBuilder = new StringBuilder();
             for (int i = 0; i < 5; i++) {
                 stringBuilder.append((int) (Math.random() *(9)));
+                log.info(stringBuilder);
             }
             code = Long.parseLong(stringBuilder.toString());
             log.info(code);
         }while (checkRoomCode(code) != null);
+        log.info(room.getName());
         room.setId(code);
         roomRepository.save(room);
         manittoRepository.save(manittoMapper.mapFrom(code, userId, 1));
@@ -100,11 +104,11 @@ public class RoomService {
     }
 
     @Transactional
-    public void startRoom(Long roomId){
+    public ApiResponse<String> startRoom(Long roomId){
         List<Manitto> manittos = manittoRepository.findByRoomAndIsCreaterIs(roomId, 0);
 
         if(manittos.size() <= 1)
-            return;
+            return new ApiResponse<>(null, ApiStatus.NotEnoughToStart);
         for(int i = 0; i < manittos.size(); i++){
             if(i == manittos.size()-1){
                 manittoRepository.updateManittoId(manittos.get(i).getUser().getId(), manittos.get(0).getUser().getId(), roomId);
@@ -114,12 +118,24 @@ public class RoomService {
         }
 
         roomRepository.updateStartRoom(roomId);
+        return new ApiResponse<>(null, ApiStatus.Ok);
+    }
+
+    public void endRoom(Long roomId){
+        roomRepository.updateEndRoom(roomId);
     }
 
     @Transactional
     public ApiResponse<User> getMyManitto(String userId, Long roomId){
         String user = manittoRepository.findByRoomAndUser(userId, roomId).get().getManittoId();
         return new ApiResponse<>(userRepository.findById(user).get(), ApiStatus.Ok);
+    }
+
+
+    @Scheduled(cron = "0 0 12 * * *")
+    public void roomScheduler(){
+        roomRepository.updateStartRoomAuto();
+        roomRepository.updateEndRoomAuto();
     }
 
 
