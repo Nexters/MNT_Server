@@ -1,16 +1,10 @@
-package com.nexters.mnt.domain;
+package com.nexters.mnt.entity;
 
-import com.nexters.mnt.domain.User;
 import lombok.Data;
-import lombok.Getter;
-import org.springframework.data.annotation.ReadOnlyProperty;
 
 import javax.persistence.*;
 
 import java.sql.Date;
-import java.util.List;
-
-import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "room_tb")

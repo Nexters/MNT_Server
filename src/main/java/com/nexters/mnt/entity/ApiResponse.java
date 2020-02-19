@@ -1,4 +1,4 @@
-package com.nexters.mnt.domain;
+package com.nexters.mnt.entity;
 
 import com.nexters.mnt.controller.ApiStatus;
 import lombok.AllArgsConstructor;

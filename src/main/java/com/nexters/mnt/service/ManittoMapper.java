@@ -1,8 +1,8 @@
 package com.nexters.mnt.service;
 
-import com.nexters.mnt.domain.Manitto;
-import com.nexters.mnt.domain.Room;
-import com.nexters.mnt.domain.User;
+import com.nexters.mnt.entity.Manitto;
+import com.nexters.mnt.entity.Room;
+import com.nexters.mnt.entity.User;
 import com.nexters.mnt.repository.RoomRepository;
 import com.nexters.mnt.repository.UserRepository;
 import lombok.extern.log4j.Log4j2;

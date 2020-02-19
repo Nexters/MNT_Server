@@ -1,10 +1,7 @@
-package com.nexters.mnt.domain;
+package com.nexters.mnt.entity;
 
 import com.fasterxml.jackson.annotation.*;
-import io.swagger.annotations.Example;
-import io.swagger.annotations.ExampleProperty;
 import lombok.*;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 

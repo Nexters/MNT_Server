@@ -1,17 +1,11 @@
 package com.nexters.mnt.controller;
 
-
-import com.fasterxml.jackson.databind.ser.FilterProvider;
-import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
-import com.nexters.mnt.domain.*;
+import com.nexters.mnt.entity.*;
 import com.nexters.mnt.repository.UserRepository;
-import com.nexters.mnt.service.MissionService;
 import com.nexters.mnt.service.RoomService;
 import com.nexters.mnt.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -53,7 +47,7 @@ public class RoomController {
     @ApiOperation(value = "방 만들기", notes = "방 코드를 응답값으로 보냄")
     @RequestMapping(value = "/room/make", method = RequestMethod.POST)
     @ResponseBody
-    public ApiResponse<Long> makeRoom(@RequestBody Room room, @RequestParam("userId") String userId){
+    public ApiResponse<String> makeRoom(@RequestBody Room room, @RequestParam("userId") String userId){
         return roomService.makeRoom(room, userId);
     }
 
@@ -101,7 +95,6 @@ public class RoomController {
     public void deleteUserFromRoom(@RequestParam("roomId") Long roomId, @RequestParam("userId") String userId){
         roomService.removeUserFromRoom(roomId, userId);
     }
-
 
 
 }

@@ -1,45 +1,32 @@
 package com.nexters.mnt.service;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nexters.mnt.controller.ApiStatus;
-import com.nexters.mnt.domain.*;
-import com.nexters.mnt.repository.ManittoRepository;
-import com.nexters.mnt.repository.RoomRepository;
-import com.nexters.mnt.repository.UserRepository;
+import com.nexters.mnt.entity.*;
+import com.nexters.mnt.repository.*;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.scheduling.annotation.Schedules;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
 @Log4j2
+@RequiredArgsConstructor
 public class RoomService {
 
     private final RoomRepository roomRepository;
     private final ManittoRepository manittoRepository;
     private final ManittoMapper manittoMapper;
-    @Autowired
-    private UserRepository userRepository;
-
-    public RoomService(RoomRepository roomRepository, ManittoRepository manittoRepository, ManittoMapper manittoMapper) {
-        this.roomRepository = roomRepository;
-        this.manittoRepository = manittoRepository;
-        this.manittoMapper = manittoMapper;
-    }
-
+    private final UserRepository userRepository;
+    private final UserMissionRepository userMissionRepository;
+    private final MissionRepository missionRepository;
 
 
     @Transactional
-    public ApiResponse<Long> makeRoom(Room room, String userId){
+    public ApiResponse<String> makeRoom(Room room, String userId){
         Long code = (long)0;
         do {
             StringBuilder stringBuilder = new StringBuilder();
@@ -54,7 +41,7 @@ public class RoomService {
         room.setId(code);
         roomRepository.save(room);
         manittoRepository.save(manittoMapper.mapFrom(code, userId, 1));
-        return new ApiResponse(code, ApiStatus.Ok);
+        return new ApiResponse(code.toString(), ApiStatus.Ok);
     }
 
     public Room checkRoomCode(Long code){
@@ -72,11 +59,15 @@ public class RoomService {
     @Transactional
     public void removeRoom(Long roomId){
         manittoRepository.deleteByRoom(roomId);
+        userMissionRepository.deleteUserMissionsByRoomId(roomId);
+        missionRepository.deleteMissionsByRoomId(roomId);
         roomRepository.deleteById(roomId);
     }
 
+    @Transactional
     public void removeUserFromRoom(Long roomId, String userId){
         manittoRepository.deleteByRoomIdAndUser(roomId, userId);
+        userMissionRepository.deleteByUserIdAndRoomId(userId, roomId);
     }
 
     public ApiResponse<List<Manitto>> getUserList(Long roomId){

@@ -1,8 +1,8 @@
 package com.nexters.mnt.controller;
 
-import com.nexters.mnt.domain.ApiResponse;
-import com.nexters.mnt.domain.Mission;
-import com.nexters.mnt.domain.UserMission;
+import com.nexters.mnt.entity.ApiResponse;
+import com.nexters.mnt.entity.Mission;
+import com.nexters.mnt.entity.UserMission;
 import com.nexters.mnt.service.MissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -36,4 +36,13 @@ public class MissionController {
         missionService.sendMission(userMission, missionId);
     }
 
+    @RequestMapping(value = "/done/{userId}", method = RequestMethod.GET)
+    public ApiResponse<List<UserMission>> getUserMission(@PathVariable String userId, @RequestParam Long roomId){
+        return missionService.getUserMission(userId, roomId);
+    }
+
+    @RequestMapping(value = "/receive/{userId}", method = RequestMethod.GET)
+    public ApiResponse<List<UserMission>> getUserReceiveMission(@PathVariable String userId, @RequestParam Long roomId){
+        return missionService.getUserReceiveMission(userId, roomId);
+    }
 }

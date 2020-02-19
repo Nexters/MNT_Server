@@ -1,11 +1,9 @@
-package com.nexters.mnt.domain;
+package com.nexters.mnt.entity;
 
 
 import lombok.Data;
-import org.springframework.data.annotation.ReadOnlyProperty;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "user_tb", schema = "mnt")
@@ -24,4 +22,5 @@ public class User {
 
     @Column(name = "fcm_token")
     private String fcmToken;
+
 }

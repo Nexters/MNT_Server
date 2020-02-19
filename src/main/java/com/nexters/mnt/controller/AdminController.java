@@ -1,6 +1,6 @@
 package com.nexters.mnt.controller;
 
-import com.nexters.mnt.domain.User;
+import com.nexters.mnt.entity.User;
 import com.nexters.mnt.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
