@@ -2,6 +2,7 @@ package com.nexters.mnt.service;
 
 import com.nexters.mnt.controller.ApiStatus;
 import com.nexters.mnt.entity.*;
+import com.nexters.mnt.entity.dto.ManittoResponse;
 import com.nexters.mnt.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Log4j2
@@ -27,21 +29,20 @@ public class RoomService {
 
     @Transactional
     public ApiResponse<String> makeRoom(Room room, String userId){
-        Long code = (long)0;
+        String code = "";
         do {
             StringBuilder stringBuilder = new StringBuilder();
             for (int i = 0; i < 5; i++) {
                 stringBuilder.append((int) (Math.random() *(9)));
                 log.info(stringBuilder);
             }
-            code = Long.parseLong(stringBuilder.toString());
-            log.info(code);
-        }while (checkRoomCode(code) != null);
+            code = stringBuilder.toString();
+        }while (checkRoomCode(Long.parseLong(code)) != null);
         log.info(room.getName());
-        room.setId(code);
+        room.setId(Long.parseLong(code));
         roomRepository.save(room);
-        manittoRepository.save(manittoMapper.mapFrom(code, userId, 1));
-        return new ApiResponse(code.toString(), ApiStatus.Ok);
+        manittoRepository.save(manittoMapper.mapFrom(Long.parseLong(code), userId, 1));
+        return new ApiResponse(code, ApiStatus.Ok);
     }
 
     public Room checkRoomCode(Long code){
@@ -70,12 +71,12 @@ public class RoomService {
         userMissionRepository.deleteByUserIdAndRoomId(userId, roomId);
     }
 
-    public ApiResponse<List<Manitto>> getUserList(Long roomId){
+    public ApiResponse<List<ManittoResponse>> getUserList(Long roomId){
         List<Manitto> manittos = manittoRepository.findByRoom(roomId).orElse(null);
         if(manittos == null)
-            return new ApiResponse<>(manittos, ApiStatus.DataNotFound);
+            return new ApiResponse<>(null, ApiStatus.DataNotFound);
         else
-            return new ApiResponse<>(manittos, ApiStatus.Ok);
+            return new ApiResponse<>(manittos.stream().map(Manitto::convertToManittoResponse).collect(Collectors.toList()), ApiStatus.Ok);
     }
 
     @Transactional
@@ -102,9 +103,9 @@ public class RoomService {
             return new ApiResponse<>(null, ApiStatus.NotEnoughToStart);
         for(int i = 0; i < manittos.size(); i++){
             if(i == manittos.size()-1){
-                manittoRepository.updateManittoId(manittos.get(i).getUser().getId(), manittos.get(0).getUser().getId(), roomId);
+                manittoRepository.updateManittoId(manittos.get(i).getUser().getId(), manittos.get(0).getUser().getId(), roomId, i+1);
             } else{
-                manittoRepository.updateManittoId(manittos.get(i).getUser().getId(), manittos.get(i+1).getUser().getId(), roomId);
+                manittoRepository.updateManittoId(manittos.get(i).getUser().getId(), manittos.get(i+1).getUser().getId(), roomId, i+1);
             }
         }
 
@@ -122,6 +123,9 @@ public class RoomService {
         return new ApiResponse<>(userRepository.findById(user).get(), ApiStatus.Ok);
     }
 
+    public Manitto getManitto(String userId, Long roomId){
+       return manittoRepository.findByRoomAndUser(userId, roomId).get();
+    }
 
     @Scheduled(cron = "0 0 12 * * *")
     public void roomScheduler(){

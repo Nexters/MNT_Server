@@ -50,6 +50,7 @@ cmake-build-*/
 
 # IntelliJ
 out/
+src/main/resources/application-aws.properties
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
@@ -110,3 +111,4 @@ gradle-app.setting
 **/build/
 
 # End of https://www.gitignore.io/api/gradle,intellij
+/src/main/resources/application-aws.properties

@@ -4,6 +4,7 @@ package com.nexters.mnt.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "user_tb", schema = "mnt")
@@ -22,5 +23,4 @@ public class User {
 
     @Column(name = "fcm_token")
     private String fcmToken;
-
 }

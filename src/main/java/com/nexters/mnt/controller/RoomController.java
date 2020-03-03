@@ -1,6 +1,7 @@
 package com.nexters.mnt.controller;
 
 import com.nexters.mnt.entity.*;
+import com.nexters.mnt.entity.dto.ManittoResponse;
 import com.nexters.mnt.repository.UserRepository;
 import com.nexters.mnt.service.RoomService;
 import com.nexters.mnt.service.UserService;
@@ -60,7 +61,7 @@ public class RoomController {
     @ApiOperation(value = "방에 참여하는 유저목록")
     @RequestMapping(value = "/room/user-list/{roomId}", method = RequestMethod.GET)
     @ResponseBody
-    public ApiResponse<List<Manitto>> getUserList(@PathVariable Long roomId ){
+    public ApiResponse<List<ManittoResponse>> getUserList(@PathVariable Long roomId ){
         return roomService.getUserList(roomId);
     }
 

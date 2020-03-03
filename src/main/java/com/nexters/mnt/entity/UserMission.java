@@ -1,12 +1,14 @@
 package com.nexters.mnt.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.nexters.mnt.entity.dto.ManittoResponse;
+import com.nexters.mnt.entity.dto.UserMissionResponse;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 
@@ -17,10 +19,11 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "user_mission_tb")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @EqualsAndHashCode
-@EntityListeners(AuditingEntityListener.class)
+@Slf4j
 public class UserMission {
 
     @Id
@@ -59,4 +62,11 @@ public class UserMission {
         this.missionId = missionId;
     }
 
+    public UserMissionResponse convertToUserMissionResponse(ManittoResponse manitto, Integer manittoFruttoId){
+        return new UserMissionResponse(this, manitto.getUserFruttoId(), manitto.getManittoId(), manittoFruttoId, this.missionId.getId());
+    }
+
+    public UserMissionResponse convertToUserMissionResponse(){
+        return new UserMissionResponse(this, null, null, null, this.missionId.getId());
+    }
 }
