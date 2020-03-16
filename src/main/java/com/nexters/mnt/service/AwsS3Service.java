@@ -7,6 +7,7 @@ import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.S3ResponseMetadata;
 import com.amazonaws.services.s3.model.*;
 import com.amazonaws.util.IOUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -44,10 +45,13 @@ public class AwsS3Service {
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentType(multipartFile.getContentType());
         objectMetadata.setContentLength(multipartFile.getSize());
-        objectMetadata.setHeader("filename", multipartFile.getOriginalFilename());
+        Date date = new Date();
 
-        s3Client.putObject(new PutObjectRequest(bucketName,
-                storedFileName, multipartFile.getInputStream(), objectMetadata));
+//        objectMetadata.setHeader("filename", multipartFile.getOriginalFilename());
+
+        PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName+"/mission",
+                                                             storedFileName, multipartFile.getInputStream(), objectMetadata);
+        s3Client.putObject(putObjectRequest);
     }
 
     public void deleteObject(String date, String storedFileName) throws AmazonServiceException{

@@ -17,6 +17,7 @@ import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.apache.tomcat.util.http.fileupload.disk.DiskFileItem;
 import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
@@ -26,6 +27,7 @@ import javax.transaction.Transactional;
 import java.io.*;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,6 +55,9 @@ public class MissionService {
 
     @Autowired
     AwsS3Service awsS3Service;
+
+    @Value("${aws.s3.url}")
+    String s3Url;
 
     @Transactional
     public ApiResponse<List<UserMissionResponse>> getTimeLine(Long roomId){
@@ -113,13 +118,14 @@ public class MissionService {
         if(mission.getImg() != null) {
             log.info(mission.toString());
             try {
-                fileName = mission.getImg().getName();
-                awsS3Service.uploadObject(mission.getImg(), mission.getImg().getName());
+                Date date = new Date();
+                fileName = mission.getImg().getOriginalFilename()+date.toString();
+                awsS3Service.uploadObject(mission.getImg(), mission.getImg().getOriginalFilename()+date.toString());
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        userMissionRepository.updateUserMission(mission, fileName);
+        userMissionRepository.updateUserMission(mission, s3Url+fileName);
         User user = roomService.getMyManitto(mission.getUserId(), mission.getRoomId()).getData();
 //        firebaseUtil.sendFcmUserToUser(user.getFcmToken(), "마니또!", "테스트~!!");
         return new ApiResponse<>(null, ApiStatus.Ok);
