@@ -50,5 +50,4 @@ public class Manitto {
         return new ManittoResponse(this.isCreater, manitto, this.user, this.fruttoId);
     }
 
-
 }
