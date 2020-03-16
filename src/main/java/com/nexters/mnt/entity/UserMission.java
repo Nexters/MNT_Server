@@ -1,6 +1,7 @@
 package com.nexters.mnt.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nexters.mnt.entity.dto.ManittoResponse;
 import com.nexters.mnt.entity.dto.UserMissionResponse;
 import io.swagger.annotations.ApiModelProperty;
@@ -28,13 +29,14 @@ public class UserMission {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
+    @JsonIgnore
     @Column(name="id")
     private Long id;
 
     @Column(name="room_tb_id")
     private Long roomId;
 
-    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = User.class)
     @JoinColumn(name="user_tb_id")
     private User userId;
 
@@ -43,16 +45,20 @@ public class UserMission {
     @JoinColumn(name = "mission_tb_id", referencedColumnName = "id")
     private Mission missionId;
 
+    @ApiModelProperty(value = "사용자가 미션을 수행하였는지 여부")
     @Column(name = "user_done")
-    private Integer userDone;
+    private int userDone;
 
     @LastModifiedDate
+    @ApiModelProperty(value = "사용자가 미션을 완료한 시")
     @Column(name = "user_done_time")
     private Date userDoneTime;
 
+    @ApiModelProperty(value = "미션 수행 이미지")
     @Column(name = "mission_img")
     private String missionImg;
 
+    @ApiModelProperty(value = "미션 수행 내용")
     @Column(name = "content")
     private String content;
 
@@ -63,10 +69,10 @@ public class UserMission {
     }
 
     public UserMissionResponse convertToUserMissionResponse(ManittoResponse manitto, Integer manittoFruttoId){
-        return new UserMissionResponse(this, manitto.getUserFruttoId(), manitto.getManitto(), manittoFruttoId, this.missionId.getId());
+        return new UserMissionResponse(this, manitto.getUserFruttoId(), manitto.getManitto(), manittoFruttoId, this.missionId.getId(), this.missionId.getName());
     }
 
     public UserMissionResponse convertToUserMissionResponse(){
-        return new UserMissionResponse(this, null, null, null, this.missionId.getId());
+        return new UserMissionResponse(this, null, null, null, this.missionId.getId(), this.missionId.getName());
     }
 }

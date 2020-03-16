@@ -10,13 +10,23 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
+import io.swagger.annotations.ApiModelProperty;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserMissionResponse {
+
+    @ApiModelProperty(value = "사용자가 수행한 미션 내용")
     private UserMission userMission;
+    @ApiModelProperty(value = "사용자의 fruttoId")
     private Integer userFruttoId;
+    @ApiModelProperty(value = "마니또에 대한 정보")
     private User manitto;
+    @ApiModelProperty(value = "마니또의 fruttoId")
     private Integer manittoFruttoId;
+    @ApiModelProperty(value = "미션 ID")
     private Long missionId;
+    @ApiModelProperty(value = "미션 이름")
+    private String missionName;
 }

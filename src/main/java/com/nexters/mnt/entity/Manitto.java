@@ -1,5 +1,6 @@
 package com.nexters.mnt.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.nexters.mnt.entity.dto.ManittoResponse;
 import lombok.Data;
@@ -17,6 +18,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 public class Manitto {
 
     @Id
+    @JsonIgnore
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "id")
     private Long id;

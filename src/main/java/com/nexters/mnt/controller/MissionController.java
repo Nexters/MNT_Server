@@ -29,7 +29,7 @@ public class MissionController {
     @Autowired
     MissionService missionService;
 
-    @ApiOperation(value = "미션 목록", produces = "multipart/form-data", notes = "사용자들이 수행한 미션을 시간순으로 보여줍니다.")
+    @ApiOperation(value = "미션 목록", produces = "multipart/form-data", notes = "사용자들이 수행한 미션을 시간순으로 보여줍니다.", response = UserMissionResponse.class)
     @RequestMapping(value = "/list/{roomId}", method = RequestMethod.GET)
     public ApiResponse<List<UserMissionResponse>> getTimeLine(@PathVariable Long roomId){
         return missionService.getTimeLine(roomId);

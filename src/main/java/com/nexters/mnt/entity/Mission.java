@@ -23,6 +23,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 public class Mission {
 
     @Id
+    @JsonIgnore
     @GeneratedValue(strategy = IDENTITY)
     @Column(name="id")
     private Long id;
