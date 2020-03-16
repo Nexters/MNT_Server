@@ -46,8 +46,8 @@ public class Manitto {
         this.room = room;
     }
 
-    public ManittoResponse convertToManittoResponse(){
-        return new ManittoResponse(this.isCreater, this.manittoId, this.user, this.fruttoId);
+    public ManittoResponse convertToManittoResponse(User manitto){
+        return new ManittoResponse(this.isCreater, manitto, this.user, this.fruttoId);
     }
 
 

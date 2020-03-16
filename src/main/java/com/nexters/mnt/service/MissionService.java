@@ -8,6 +8,8 @@ import com.nexters.mnt.entity.dto.*;
 import com.nexters.mnt.repository.ManittoRepository;
 import com.nexters.mnt.repository.MissionRepository;
 import com.nexters.mnt.repository.UserMissionRepository;
+import com.nexters.mnt.repository.UserRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.FileItem;
@@ -44,6 +46,9 @@ public class MissionService {
     private RoomService roomService;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     FirebaseUtil firebaseUtil;
 
     @Autowired
@@ -57,8 +62,9 @@ public class MissionService {
 
         for(UserMission userMission : userMissions){
             Manitto manitto = roomService.getManitto(userMission.getUserId().getId(), roomId);
+            User manittoInfo = userRepository.getOne(manitto.getManittoId());
             Integer manittoFruttoId = roomService.getManitto(manitto.getManittoId(), roomId).getFruttoId();
-            userMissionResponses.add(userMission.convertToUserMissionResponse(manitto.convertToManittoResponse(), manittoFruttoId));
+            userMissionResponses.add(userMission.convertToUserMissionResponse(manitto.convertToManittoResponse(manittoInfo), manittoFruttoId));
         }
         return new ApiResponse<>(userMissionResponses, ApiStatus.Ok);
     }
@@ -93,7 +99,8 @@ public class MissionService {
                     continue;
                 log.info(manitto.toString());
                 Integer manittoFruttoId = roomService.getManitto(manitto.getManittoId(), roomId).getFruttoId();
-                userMissionResponses.add(userMission.convertToUserMissionResponse(manitto.convertToManittoResponse(), manittoFruttoId));
+                User manittoInfo = userRepository.getOne(manitto.getManittoId());
+                userMissionResponses.add(userMission.convertToUserMissionResponse(manitto.convertToManittoResponse(manittoInfo), manittoFruttoId));
             }
             missionResponses.add(mission.convertToMissionResponse(userMissionResponses));
         }

@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 @EnableSwagger2
 @Slf4j
 @EnableScheduling
-@PropertySource("application-aws.properties")
+@PropertySource("classpath:application-aws.properties")
 public class MntApplication{
 
     public static void main(String[] args) {

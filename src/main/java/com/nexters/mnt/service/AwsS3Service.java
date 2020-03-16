@@ -1,12 +1,18 @@
 package com.nexters.mnt.service;
 
 import com.amazonaws.AmazonServiceException;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.regions.Region;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.*;
 import com.amazonaws.util.IOUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -16,17 +22,22 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+@Slf4j
 @Service
 public class AwsS3Service {
 
     private AmazonS3 s3Client;
-
-    public AwsS3Service(){
-        this.s3Client = AmazonS3ClientBuilder.standard().build();
-    }
-
     @Value("${aws.bucket.name}")
     private String bucketName;
+
+    public AwsS3Service( @Value("${cloud.aws.credentials.access-key}") String accessKey, @Value("${cloud.aws.credentials.secret-key}") String secretKey ){
+        BasicAWSCredentials awsCreds = new BasicAWSCredentials(accessKey, secretKey);
+        this.s3Client = AmazonS3ClientBuilder.standard()
+                .withRegion(Regions.AP_NORTHEAST_2)
+                .enableForceGlobalBucketAccess()
+                .withCredentials(new AWSStaticCredentialsProvider(awsCreds))
+                .build();
+    }
 
     public void uploadObject(MultipartFile multipartFile, String storedFileName) throws IOException{
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
@@ -35,7 +46,7 @@ public class AwsS3Service {
         objectMetadata.setContentLength(multipartFile.getSize());
         objectMetadata.setHeader("filename", multipartFile.getOriginalFilename());
 
-        s3Client.putObject(new PutObjectRequest(bucketName+"/"+ simpleDateFormat.format(new Date()),
+        s3Client.putObject(new PutObjectRequest(bucketName,
                 storedFileName, multipartFile.getInputStream(), objectMetadata));
     }
 

@@ -20,7 +20,8 @@ public interface ManittoRepository extends JpaRepository<Manitto, Long> {
     void deleteByRoom(@Param("roomId") Long roomId);
 
     @Modifying
-    @Query(value = "update manitto_tb set manitto_id = :manittoId where room_TB_id = :roomId and user_TB_id = :userId and frutto_id = :fruttoId", nativeQuery = true)
+    @Query(value = "update manitto_tb set manitto_id = :manittoId, frutto_id = :fruttoId where room_TB_id = :roomId and user_TB_id = :userId", nativeQuery =
+            true)
     void updateManittoId( @Param("userId")String userId, @Param("manittoId")String manittoId, @Param("roomId")Long roomId, @Param("fruttoId")int fruttoId);
 
     @Query(value = "select * from manitto_tb where room_tb_id = ?1", nativeQuery = true)

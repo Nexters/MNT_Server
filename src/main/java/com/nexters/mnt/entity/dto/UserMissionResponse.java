@@ -16,7 +16,7 @@ import java.util.Date;
 public class UserMissionResponse {
     private UserMission userMission;
     private Integer userFruttoId;
-    private String manittoId;
+    private User manitto;
     private Integer manittoFruttoId;
     private Long missionId;
 }

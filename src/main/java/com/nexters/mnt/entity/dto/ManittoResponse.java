@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 public class ManittoResponse {
     private int isCreater;
-    private String manittoId;
+    private User manitto;
     private User user;
     private Integer userFruttoId;
 }

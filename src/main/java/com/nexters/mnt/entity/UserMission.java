@@ -63,7 +63,7 @@ public class UserMission {
     }
 
     public UserMissionResponse convertToUserMissionResponse(ManittoResponse manitto, Integer manittoFruttoId){
-        return new UserMissionResponse(this, manitto.getUserFruttoId(), manitto.getManittoId(), manittoFruttoId, this.missionId.getId());
+        return new UserMissionResponse(this, manitto.getUserFruttoId(), manitto.getManitto(), manittoFruttoId, this.missionId.getId());
     }
 
     public UserMissionResponse convertToUserMissionResponse(){
