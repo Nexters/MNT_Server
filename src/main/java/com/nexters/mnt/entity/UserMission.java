@@ -47,7 +47,7 @@ public class UserMission {
 
     @ApiModelProperty(value = "사용자가 미션을 수행하였는지 여부")
     @Column(name = "user_done")
-    private int userDone;
+    private Integer userDone;
 
     @LastModifiedDate
     @ApiModelProperty(value = "사용자가 미션을 완료한 시")
