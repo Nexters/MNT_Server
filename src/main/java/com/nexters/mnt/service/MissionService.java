@@ -114,19 +114,26 @@ public class MissionService {
 
     @Transactional
     public ApiResponse<String> sendMission(UserMissionRequest mission) {
-        String fileName = "";
+        String fileName = null;
         if(mission.getImg() != null) {
             log.info(mission.toString());
             try {
                 Date date = new Date();
                 fileName = mission.getImg().getOriginalFilename()+date.toString();
                 awsS3Service.uploadObject(mission.getImg(), mission.getImg().getOriginalFilename()+date.toString());
+                fileName = s3Url+fileName;
             } catch (IOException e) {
-                e.printStackTrace();
+                log.info(e.getMessage());
+                return new ApiResponse<>(null, ApiStatus.Fail);
             }
         }
-        userMissionRepository.updateUserMission(mission, s3Url+fileName);
-        User user = roomService.getMyManitto(mission.getUserId(), mission.getRoomId()).getData();
+        try {
+            userMissionRepository.updateUserMission(mission,  fileName);
+            User user = roomService.getMyManitto(mission.getUserId(), mission.getRoomId()).getData();
+        } catch (Exception e){
+            log.info(e.getMessage());
+            return new ApiResponse<>(null, ApiStatus.Fail);
+        }
 //        firebaseUtil.sendFcmUserToUser(user.getFcmToken(), "마니또!", "테스트~!!");
         return new ApiResponse<>(null, ApiStatus.Ok);
     }

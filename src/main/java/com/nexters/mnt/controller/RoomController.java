@@ -41,7 +41,7 @@ public class RoomController {
     @ApiOperation(value = "사용자가 참여하는 방 조회", notes = "추후 확장을 고려해 리스트로 응답")
     @RequestMapping(value = "/room/check", method = RequestMethod.GET)
     @ResponseBody
-    public ApiResponse<List<Manitto>> checkRoom(@RequestHeader String userId){
+    public ApiResponse<List<ManittoResponse>> checkRoom(@RequestHeader String userId){
         return roomService.checkRoomExist(userId);
     }
 

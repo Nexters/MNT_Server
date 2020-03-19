@@ -51,9 +51,16 @@ public class RoomService {
 		return roomRepository.findById(code).orElse(null);
 	}
 
-	public ApiResponse<List<Manitto>> checkRoomExist(String userId) {
+	public ApiResponse<List<ManittoResponse>> checkRoomExist(String userId) {
 		List<Manitto> manittos = manittoRepository.findByUser(userId).orElse(null);
-        if (manittos == null) { return new ApiResponse<>(manittos, ApiStatus.DataNotFound); } else { return new ApiResponse<>(manittos, ApiStatus.Ok); }
+		if (manittos == null) {
+			return new ApiResponse<>(null, ApiStatus.DataNotFound);
+		} else {
+			List<ManittoResponse> manittoResponses =
+					manittos.stream().map(manitto -> manitto.convertToManittoResponse(getMyManitto(manitto.getUser().getId(), manitto.getRoom().getId()).getData()))
+					        .collect(Collectors.toList());
+			return new ApiResponse<>(manittoResponses, ApiStatus.Ok);
+		}
 	}
 
 	@Transactional
@@ -72,23 +79,25 @@ public class RoomService {
 
 	public ApiResponse<List<ManittoResponse>> getUserList(Long roomId) {
 		List<Manitto> manittos = manittoRepository.findByRoom(roomId).orElse(null);
-        if (manittos == null) { return new ApiResponse<>(null, ApiStatus.DataNotFound); } else {
-            return new ApiResponse<>(manittos.stream().map(manitto -> manitto
-                    .convertToManittoResponse(manitto.getManittoId() != null ? userRepository.getOne(manitto.getManittoId()) : null))
-                    .collect(Collectors.toList()), ApiStatus.Ok);
-        }
+		if (manittos == null) {
+			return new ApiResponse<>(null, ApiStatus.DataNotFound);
+		} else {
+			return new ApiResponse<>(manittos.stream().map(manitto -> manitto
+					.convertToManittoResponse(manitto.getManittoId() != null ? userRepository.getOne(manitto.getManittoId()) : null))
+			                                 .collect(Collectors.toList()), ApiStatus.Ok);
+		}
 	}
 
 	@Transactional
 	public ApiResponse<Room> attendRoom(Long roomId, String userId) {
 		Room room = null;
-        if ((room = roomRepository.findByIdAndIsStartAndIsDone(roomId, 0, 0).orElse(null)) == null) {
-            return new ApiResponse<>(null, ApiStatus.NotEstablishedRoom);
-        }
+		if ((room = roomRepository.findByIdAndIsStartAndIsDone(roomId, 0, 0).orElse(null)) == null) {
+			return new ApiResponse<>(null, ApiStatus.NotEstablishedRoom);
+		}
 
-        if (manittoRepository.findByRoomAndUser(userId, roomId).orElse(null) != null) { return new ApiResponse<>(null, ApiStatus.DuplicateRoom); }
+		if (manittoRepository.findByRoomAndUser(userId, roomId).orElse(null) != null) { return new ApiResponse<>(null, ApiStatus.DuplicateRoom); }
 
-        if (room.getMaxPeople() == manittoRepository.countByRoom(roomId)) { return new ApiResponse<>(null, ApiStatus.FULL); }
+		if (room.getMaxPeople() == manittoRepository.countByRoom(roomId)) { return new ApiResponse<>(null, ApiStatus.FULL); }
 
 		manittoRepository.save(manittoMapper.mapFrom(roomId, userId, 0));
 		return new ApiResponse<>(roomRepository.findById(roomId).get(), ApiStatus.Ok);
@@ -98,7 +107,7 @@ public class RoomService {
 	public ApiResponse<String> startRoom(Long roomId) {
 		List<Manitto> manittos = manittoRepository.findByRoomAndIsCreaterIs(roomId, 0);
 
-        if (manittos.size() <= 1) { return new ApiResponse<>(null, ApiStatus.NotEnoughToStart); }
+		if (manittos.size() <= 1) { return new ApiResponse<>(null, ApiStatus.NotEnoughToStart); }
 		for (int i = 0; i < manittos.size(); i++) {
 			if (i == manittos.size() - 1) {
 				manittoRepository.updateManittoId(manittos.get(i).getUser().getId(), manittos.get(0).getUser().getId(), roomId, i + 1);
@@ -115,7 +124,6 @@ public class RoomService {
 		roomRepository.updateEndRoom(roomId);
 	}
 
-	@Transactional
 	public ApiResponse<User> getMyManitto(String userId, Long roomId) {
 		String user = manittoRepository.findByRoomAndUser(userId, roomId).get().getManittoId();
 		return new ApiResponse<>(userRepository.findById(user).get(), ApiStatus.Ok);

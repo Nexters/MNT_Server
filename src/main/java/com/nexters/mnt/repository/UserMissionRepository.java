@@ -17,7 +17,7 @@ public interface UserMissionRepository extends JpaRepository<UserMission, Long> 
 
     @Transactional
     @Modifying
-    @Query("update UserMission u set u.userDone = 1, u.content = :#{#userMission.content}, u.missionImg = :imgName " +
+    @Query("update UserMission u set u.userDone = 1, u.content = :#{#userMission.content}, u.missionImg = :imgName, u.userDoneTime = :#{#userMission.date} " +
             "where u.roomId = :#{#userMission.roomId} and u.userId.id = :#{#userMission.userId} and u.missionId.id = :#{#userMission.missionId}")
     void updateUserMission(@Param("userMission") UserMissionRequest userMission, @Param("imgName") String fileName);
 
