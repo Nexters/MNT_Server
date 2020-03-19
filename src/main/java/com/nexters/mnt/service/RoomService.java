@@ -3,6 +3,7 @@ package com.nexters.mnt.service;
 import com.nexters.mnt.controller.ApiStatus;
 import com.nexters.mnt.entity.*;
 import com.nexters.mnt.entity.dto.ManittoResponse;
+import com.nexters.mnt.entity.dto.UserResponse;
 import com.nexters.mnt.repository.*;
 
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,14 +55,17 @@ public class RoomService {
 
 	public ApiResponse<List<ManittoResponse>> checkRoomExist(String userId) {
 		List<Manitto> manittos = manittoRepository.findByUser(userId).orElse(null);
+		List<ManittoResponse> manittoResponses = new ArrayList<>();
 		if (manittos == null) {
 			return new ApiResponse<>(null, ApiStatus.DataNotFound);
-		} else {
-			List<ManittoResponse> manittoResponses =
-					manittos.stream().map(manitto -> manitto.convertToManittoResponse(getMyManitto(manitto.getUser().getId(), manitto.getRoom().getId()).getData()))
-					        .collect(Collectors.toList());
-			return new ApiResponse<>(manittoResponses, ApiStatus.Ok);
 		}
+		for (Manitto manitto : manittos) {
+			if (manitto.getManittoId() == null) { continue; }
+
+			Manitto manittoInfo = getManitto(manitto.getManittoId(), manitto.getRoom().getId());
+			manittoResponses.add(manitto.convertToManittoResponse(new UserResponse(manitto.getManittoId(), manittoInfo.getUser().getName(), manittoInfo.getFruttoId())));
+		}
+		return new ApiResponse<>( manittoResponses, ApiStatus.Ok);
 	}
 
 	@Transactional
@@ -79,13 +84,17 @@ public class RoomService {
 
 	public ApiResponse<List<ManittoResponse>> getUserList(Long roomId) {
 		List<Manitto> manittos = manittoRepository.findByRoom(roomId).orElse(null);
+		List<ManittoResponse> manittoResponses = new ArrayList<>();
 		if (manittos == null) {
 			return new ApiResponse<>(null, ApiStatus.DataNotFound);
-		} else {
-			return new ApiResponse<>(manittos.stream().map(manitto -> manitto
-					.convertToManittoResponse(manitto.getManittoId() != null ? userRepository.getOne(manitto.getManittoId()) : null))
-			                                 .collect(Collectors.toList()), ApiStatus.Ok);
 		}
+		for (Manitto manitto : manittos) {
+			if (manitto.getManittoId() == null) { continue; }
+
+			Manitto manittoInfo = getManitto(manitto.getManittoId(), manitto.getRoom().getId());
+			manittoResponses.add(manitto.convertToManittoResponse(new UserResponse(manitto.getManittoId(), manittoInfo.getUser().getName(), manittoInfo.getFruttoId())));
+		}
+		return new ApiResponse<>( manittoResponses, ApiStatus.Ok);
 	}
 
 	@Transactional

@@ -68,11 +68,11 @@ public class UserMission {
         this.missionId = missionId;
     }
 
-    public UserMissionResponse convertToUserMissionResponse(ManittoResponse manitto, Integer manittoFruttoId){
-        return new UserMissionResponse(this, manitto.getUserFruttoId(), manitto.getManitto(), manittoFruttoId, this.missionId.getId(), this.missionId.getName());
+    public UserMissionResponse convertToUserMissionResponse(ManittoResponse manitto){
+        return new UserMissionResponse(this, manitto.getUserFruttoId(), manitto.getManitto(), this.missionId.getId(), this.missionId.getName());
     }
 
     public UserMissionResponse convertToUserMissionResponse(){
-        return new UserMissionResponse(this, null, null, null, this.missionId.getId(), this.missionId.getName());
+        return new UserMissionResponse(this, null, null, this.missionId.getId(), this.missionId.getName());
     }
 }

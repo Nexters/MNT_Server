@@ -3,6 +3,8 @@ package com.nexters.mnt.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.nexters.mnt.entity.dto.ManittoResponse;
+import com.nexters.mnt.entity.dto.UserResponse;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -48,7 +50,7 @@ public class Manitto {
         this.room = room;
     }
 
-    public ManittoResponse convertToManittoResponse(User manitto){
+    public ManittoResponse convertToManittoResponse(UserResponse manitto){
         return new ManittoResponse(this.isCreater, manitto, this.user, this.fruttoId);
     }
 

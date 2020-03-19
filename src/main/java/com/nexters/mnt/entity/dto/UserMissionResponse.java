@@ -22,9 +22,7 @@ public class UserMissionResponse {
     @ApiModelProperty(value = "사용자의 fruttoId")
     private Integer userFruttoId;
     @ApiModelProperty(value = "마니또에 대한 정보")
-    private User manitto;
-    @ApiModelProperty(value = "마니또의 fruttoId")
-    private Integer manittoFruttoId;
+    private UserResponse manitto;
     @ApiModelProperty(value = "미션 ID")
     private Long missionId;
     @ApiModelProperty(value = "미션 이름")
