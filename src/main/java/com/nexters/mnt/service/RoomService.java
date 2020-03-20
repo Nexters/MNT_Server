@@ -60,10 +60,13 @@ public class RoomService {
 			return new ApiResponse<>(null, ApiStatus.DataNotFound);
 		}
 		for (Manitto manitto : manittos) {
-			if (manitto.getManittoId() == null) { continue; }
-
-			Manitto manittoInfo = getManitto(manitto.getManittoId(), manitto.getRoom().getId());
-			manittoResponses.add(manitto.convertToManittoResponse(new UserResponse(manitto.getManittoId(), manittoInfo.getUser().getName(), manittoInfo.getFruttoId())));
+			Manitto manittoInfo = null;
+			if (manitto.getManittoId() != null) {
+				manittoInfo = getManitto(manitto.getManittoId(), manitto.getRoom().getId());
+			}
+			manittoResponses.add(manitto.convertToManittoResponse(
+					new UserResponse(manitto.getManittoId(), manittoInfo != null ? manittoInfo.getUser().getName() : null,
+					                 manittoInfo != null ? manittoInfo.getFruttoId() : null)));
 		}
 		return new ApiResponse<>( manittoResponses, ApiStatus.Ok);
 	}
@@ -89,10 +92,13 @@ public class RoomService {
 			return new ApiResponse<>(null, ApiStatus.DataNotFound);
 		}
 		for (Manitto manitto : manittos) {
-			if (manitto.getManittoId() == null) { continue; }
-
-			Manitto manittoInfo = getManitto(manitto.getManittoId(), manitto.getRoom().getId());
-			manittoResponses.add(manitto.convertToManittoResponse(new UserResponse(manitto.getManittoId(), manittoInfo.getUser().getName(), manittoInfo.getFruttoId())));
+			Manitto manittoInfo = null;
+			if (manitto.getManittoId() != null) {
+				manittoInfo = getManitto(manitto.getManittoId(), manitto.getRoom().getId());
+			}
+			manittoResponses.add(manitto.convertToManittoResponse(
+					new UserResponse(manitto.getManittoId(), manittoInfo != null ? manittoInfo.getUser().getName() : null,
+					                 manittoInfo != null ? manittoInfo.getFruttoId() : null)));
 		}
 		return new ApiResponse<>( manittoResponses, ApiStatus.Ok);
 	}
