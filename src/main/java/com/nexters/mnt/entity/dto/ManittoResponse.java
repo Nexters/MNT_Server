@@ -1,5 +1,6 @@
 package com.nexters.mnt.entity.dto;
 
+import com.nexters.mnt.entity.Room;
 import com.nexters.mnt.entity.User;
 import lombok.*;
 import lombok.Builder.Default;
@@ -20,4 +21,5 @@ public class ManittoResponse {
     @ApiModelProperty(value = "사용자에대한 정보")
     private User user;
     private Integer userFruttoId;
+    private Room room;
 }
