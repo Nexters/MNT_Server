@@ -30,6 +30,6 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 
     @Transactional
     @Modifying
-    @Query(value = "update room_tb set isDone = 1 where id = :roomId ", nativeQuery = true)
+    @Query(value = "update room_tb set room_tb.is_done = 1 where id = :roomId ", nativeQuery = true)
     void updateEndRoom(@Param("roomId")Long roomId );
 }

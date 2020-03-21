@@ -148,10 +148,10 @@ public class RoomService {
 		return manittoRepository.findByRoomAndUser(userId, roomId).get();
 	}
 
-	@Scheduled(cron = "0 0 12 * * *")
+	/*@Scheduled(cron = "0 0 12 * * *")
 	public void roomScheduler() {
 		roomRepository.updateStartRoomAuto();
 		roomRepository.updateEndRoomAuto();
-	}
+	}*/
 
 }
