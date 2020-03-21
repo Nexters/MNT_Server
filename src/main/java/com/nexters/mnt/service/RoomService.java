@@ -82,7 +82,7 @@ public class RoomService {
 	@Transactional
 	public void removeUserFromRoom(Long roomId, String userId) {
 		manittoRepository.deleteByRoomIdAndUser(roomId, userId);
-		userMissionRepository.deleteByUserIdAndRoomId(userId, roomId);
+//		userMissionRepository.deleteByUserIdAndRoomId(userId, roomId);
 	}
 
 	public ApiResponse<List<ManittoResponse>> getUserList(Long roomId) {

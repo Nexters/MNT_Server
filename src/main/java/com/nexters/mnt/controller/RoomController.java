@@ -93,8 +93,13 @@ public class RoomController {
 
     @ApiOperation(value = "사용자 방에서 삭제하기")
     @RequestMapping(value = "/room/user", method = RequestMethod.DELETE)
-    public void deleteUserFromRoom(@RequestParam("roomId") Long roomId, @RequestParam("userId") String userId){
-        roomService.removeUserFromRoom(roomId, userId);
+    public ApiResponse<String> deleteUserFromRoom(@RequestParam("roomId") Long roomId, @RequestParam("userId") String userId){
+        try{
+            roomService.removeUserFromRoom(roomId, userId);
+        } catch (Exception e){
+            return new ApiResponse<>(null, ApiStatus.Fail);
+        }
+        return new ApiResponse<>(null, ApiStatus.Ok);
     }
 
 

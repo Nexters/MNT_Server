@@ -118,6 +118,7 @@ public class MissionService {
 	@Transactional
 	public ApiResponse<String> sendMission(UserMissionRequest mission) {
 		String fileName = null;
+		mission.setDate(new Date());
 		if (mission.getImg() != null) {
 			log.info(mission.toString());
 			try {
