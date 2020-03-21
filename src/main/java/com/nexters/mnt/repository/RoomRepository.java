@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
+
+import java.util.List;
 import java.util.Optional;
 
 public interface RoomRepository extends JpaRepository<Room, Long> {
@@ -27,6 +29,12 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     @Modifying
     @Query(value = "update room_tb set room_tb.is_done = 1 where date(room_tb.end_day) <= date(now()) ", nativeQuery = true)
     void updateEndRoomAuto();
+
+    @Query(value = "select * from room_tb where date(room_tb.start_day) >= date(now())", nativeQuery = true)
+    List<Room> findRoomByStartDay();
+
+    @Query(value = "select * from room_tb where date(room_tb.end_day) <= date(now())", nativeQuery = true)
+    List<Room> findRoomEndDay();
 
     @Transactional
     @Modifying

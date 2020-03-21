@@ -144,8 +144,17 @@ public class MissionService {
 
 	@Transactional
 	public ApiResponse<List<UserMissionResponse>> getUserMission(String userId, Long roomId) {
-		return new ApiResponse<>(userMissionRepository.findByUserIdAndRoomId(userId, roomId).stream().map(UserMission::convertToUserMissionResponse)
-		                                              .collect(Collectors.toList()), ApiStatus.Ok);
+		List<UserMission> userMissions = userMissionRepository.findByUserIdAndRoomId(userId, roomId);
+		List<UserMissionResponse> userMissionResponses = new ArrayList<>();
+
+		for(UserMission userMission : userMissions){
+			Manitto manitto = roomService.getManitto(userMission.getUserId().getId(), roomId);
+			User manittoInfo = userRepository.getOne(manitto.getManittoId());
+			Integer manittoFruttoId = roomService.getManitto(manitto.getManittoId(), roomId).getFruttoId();
+			userMissionResponses.add(userMission.convertToUserMissionResponse(
+					manitto.convertToManittoResponse(new UserResponse(manittoInfo.getId(), manittoInfo.getName(), manittoFruttoId))));
+		}
+		return new ApiResponse<>( userMissionResponses, ApiStatus.Ok);
 	}
 
 	@Transactional
