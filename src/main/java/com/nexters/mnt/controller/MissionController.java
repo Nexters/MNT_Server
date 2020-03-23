@@ -54,7 +54,7 @@ public class MissionController {
             @RequestParam String userId,
             @RequestParam Long missionId,
             @RequestParam(required = false) String content,
-            @RequestPart(required = false) MultipartFile img) {
+            @RequestParam(required = false) MultipartFile img) {
         UserMissionRequest userMission = new UserMissionRequest(roomId, userId, missionId, content,new Date(), img);
         return missionService.sendMission(userMission);
     }
