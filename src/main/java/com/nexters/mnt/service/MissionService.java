@@ -124,8 +124,8 @@ public class MissionService {
 			log.info(mission.toString());
 			try {
 				Date date = new Date();
-				fileName = mission.getImg().getOriginalFilename() + date.toString();
-				awsS3Service.uploadObject(mission.getImg(), mission.getImg().getOriginalFilename() + date.toString());
+				fileName = mission.getImg().getOriginalFilename();
+				awsS3Service.uploadObject(mission.getImg(), mission.getImg().getOriginalFilename());
 				fileName = s3Url + fileName;
 			} catch (IOException e) {
 				log.info(e.getMessage());
