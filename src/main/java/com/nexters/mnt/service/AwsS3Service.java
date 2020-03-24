@@ -41,10 +41,10 @@ public class AwsS3Service {
     }
 
     public void uploadObject(MultipartFile multipartFile, String storedFileName) throws IOException{
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentType(multipartFile.getContentType());
         objectMetadata.setContentLength(multipartFile.getSize());
+        objectMetadata.setContentDisposition("inline");
         Date date = new Date();
 
 //        objectMetadata.setHeader("filename", multipartFile.getOriginalFilename());
