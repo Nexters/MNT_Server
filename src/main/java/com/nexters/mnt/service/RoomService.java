@@ -125,9 +125,9 @@ public class RoomService {
 		if (manittos.size() <= 1) { return new ApiResponse<>(null, ApiStatus.NotEnoughToStart); }
 		for (int i = 0; i < manittos.size(); i++) {
 			if (i == manittos.size() - 1) {
-				manittoRepository.updateManittoId(manittos.get(i).getUser().getId(), manittos.get(0).getUser().getId(), roomId, i + 1);
+				manittoRepository.updateManittoId(manittos.get(i).getUser().getId(), manittos.get(0).getUser().getId(), roomId, i + 2);
 			} else {
-				manittoRepository.updateManittoId(manittos.get(i).getUser().getId(), manittos.get(i + 1).getUser().getId(), roomId, i + 1);
+				manittoRepository.updateManittoId(manittos.get(i).getUser().getId(), manittos.get(i + 1).getUser().getId(), roomId, i + 2);
 			}
 		}
 
