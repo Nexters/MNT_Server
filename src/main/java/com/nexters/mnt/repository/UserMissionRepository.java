@@ -24,7 +24,7 @@ public interface UserMissionRepository extends JpaRepository<UserMission, Long> 
     @Query("select u from UserMission u where u.roomId = :roomId and u.userId = :userId and u.missionId.id = :missionId")
     UserMission findByRoomIdAndUserIdAndMissionId(@Param("roomId") Long roomId, @Param("userId") String userId, @Param("missionId") Long missionId);
 
-    @Query("select u from UserMission u join fetch u.missionId where u.userId.id = :userId and u.roomId = :roomId")
+    @Query("select u from UserMission u join fetch u.missionId where u.userId.id = :userId and u.roomId = :roomId and u.userDone = 1")
     List<UserMission> findByUserIdAndRoomId(@Param("userId")String userId, @Param("roomId")Long roomId);
 
     @Query("delete from UserMission u where u.userId.id = :userId and u.roomId = :roomId")

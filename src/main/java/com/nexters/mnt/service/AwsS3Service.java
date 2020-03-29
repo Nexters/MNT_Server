@@ -42,7 +42,7 @@ public class AwsS3Service {
 
     public void uploadObject(MultipartFile multipartFile, String storedFileName) throws IOException{
         ObjectMetadata objectMetadata = new ObjectMetadata();
-        objectMetadata.setContentType(multipartFile.getContentType());
+        objectMetadata.setContentType("image/png");
         objectMetadata.setContentLength(multipartFile.getSize());
         objectMetadata.setContentDisposition("inline");
         Date date = new Date();

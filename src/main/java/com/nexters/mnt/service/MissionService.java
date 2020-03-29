@@ -3,10 +3,12 @@ package com.nexters.mnt.service;
 import com.google.protobuf.Api;
 import com.nexters.mnt.common.FirebaseUtil;
 import com.nexters.mnt.controller.ApiStatus;
+import com.nexters.mnt.controller.UserStatus;
 import com.nexters.mnt.entity.*;
 import com.nexters.mnt.entity.dto.*;
 import com.nexters.mnt.repository.ManittoRepository;
 import com.nexters.mnt.repository.MissionRepository;
+import com.nexters.mnt.repository.RoomRepository;
 import com.nexters.mnt.repository.UserMissionRepository;
 import com.nexters.mnt.repository.UserRepository;
 
@@ -45,6 +47,9 @@ public class MissionService {
 
 	@Autowired
 	private ManittoRepository manittoRepository;
+
+	@Autowired
+	private RoomRepository roomRepository;
 
 	@Autowired
 	private RoomService roomService;
@@ -163,5 +168,20 @@ public class MissionService {
 		String manittoId = manittoRepository.findByManittoIdAndRoom(userId, roomId).get().getUser().getId();
 		return new ApiResponse<>(userMissionRepository.findByUserIdAndRoomId(manittoId, roomId).stream().map(UserMission::convertToUserMissionResponse)
 		                                              .collect(Collectors.toList()), ApiStatus.Ok);
+	}
+
+	public ApiResponse getDashBoard(String userId, Long roomId, UserStatus userStatus) {
+
+		Room room = roomRepository.findById(roomId).get();
+		DashBoardResponse dashBoardResponse = new DashBoardResponse();
+		dashBoardResponse.setRoom(room);
+		dashBoardResponse.setMissionCountOfAll((long)missionRepository.findByRoomId(roomId).size());
+		if(userStatus == UserStatus.User){
+			List<UserMissionResponse> list = getUserMission(userId, roomId).getData();
+			dashBoardResponse.setMissionCountOfUserSend(list.stream().filter(m-> m.getUserMission().getUserDone()==1).count());
+			dashBoardResponse.setMissionCountOfUserReceive((long)getUserReceiveMission(userId, roomId).getData().size());
+		}
+
+		return new ApiResponse<>(dashBoardResponse, ApiStatus.Ok);
 	}
 }

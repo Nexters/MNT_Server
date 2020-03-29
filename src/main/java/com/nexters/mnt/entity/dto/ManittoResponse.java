@@ -15,7 +15,7 @@ import io.swagger.annotations.ApiModelProperty;
 @AllArgsConstructor
 public class ManittoResponse {
     @ApiModelProperty(value = "이 사용자가 이 방의 방장인지 유무 방장이라면 1")
-    private int isCreater;
+    private int isCreater = 0;
     @ApiModelProperty(value = "마니또(사용자가 돌봐야 하는 사람)에 대한 정보")
     private UserResponse manitto;
     @ApiModelProperty(value = "사용자에대한 정보")

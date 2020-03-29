@@ -8,7 +8,11 @@ import com.nexters.mnt.entity.dto.MissionResponse;
 import com.nexters.mnt.entity.dto.UserMissionRequest;
 import com.nexters.mnt.entity.dto.UserMissionResponse;
 import com.nexters.mnt.service.MissionService;
+
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -69,5 +73,13 @@ public class MissionController {
     @RequestMapping(value = "/receive/{userId}", method = RequestMethod.GET)
     public ApiResponse<List<UserMissionResponse>> getUserReceiveMission(@PathVariable String userId, @RequestParam Long roomId){
         return missionService.getUserReceiveMission(userId, roomId);
+    }
+
+    @ApiOperation(value = "사용자 대시보드", notes = "사용자/관리자의 대시보드 화면")
+    @RequestMapping(value = "/dashBoard/{roll}", method = RequestMethod.GET)
+    public ApiResponse getUserMissionCount(@ApiParam(allowableValues = "admin, user") @PathVariable String roll, @RequestParam String userId,
+                                           @RequestParam Long roomId) {
+
+        return missionService.getDashBoard(userId, roomId, UserStatus.getUserStatus(roll));
     }
 }
