@@ -166,7 +166,7 @@ public class MissionService {
 	@Transactional
 	public ApiResponse<List<UserMissionResponse>> getUserReceiveMission(String userId, Long roomId) {
 		String manittoId = manittoRepository.findByManittoIdAndRoom(userId, roomId).get().getUser().getId();
-		return new ApiResponse<>(userMissionRepository.findByUserIdAndRoomId(manittoId, roomId).stream().map(UserMission::convertToUserMissionResponse)
+		return new ApiResponse<>(userMissionRepository.findByUserIdAndRoomIdAndUserDone(manittoId, roomId).stream().map(UserMission::convertToUserMissionResponse)
 		                                              .collect(Collectors.toList()), ApiStatus.Ok);
 	}
 
