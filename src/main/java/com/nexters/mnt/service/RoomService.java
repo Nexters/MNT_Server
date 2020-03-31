@@ -17,6 +17,7 @@ import javax.transaction.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -87,10 +88,11 @@ public class RoomService {
 
 	public ApiResponse<List<ManittoResponse>> getUserList(Long roomId) {
 		List<Manitto> manittos = manittoRepository.findByRoom(roomId).orElse(null);
-		List<ManittoResponse> manittoResponses = new ArrayList<>();
 		if (manittos == null) {
 			return new ApiResponse<>(null, ApiStatus.DataNotFound);
 		}
+
+		List<ManittoResponse> manittoResponses = new ArrayList<>();
 		for (Manitto manitto : manittos) {
 			Manitto manittoInfo = null;
 			if (manitto.getManittoId() != null) {
@@ -123,12 +125,19 @@ public class RoomService {
 		List<Manitto> manittos = manittoRepository.findByRoomAndIsCreaterIs(roomId, 0);
 
 		if (manittos.size() <= 1) { return new ApiResponse<>(null, ApiStatus.NotEnoughToStart); }
+		List<Integer> idList = new ArrayList<>();
+		for(int i = 2; i < 15; i++){
+			idList.add(i);
+		}
+		Random random = new Random();
 		for (int i = 0; i < manittos.size(); i++) {
+			int idx = random.nextInt(idList.size() > 1 ? idList.size()-1:1);
 			if (i == manittos.size() - 1) {
-				manittoRepository.updateManittoId(manittos.get(i).getUser().getId(), manittos.get(0).getUser().getId(), roomId, i + 2);
+				manittoRepository.updateManittoId(manittos.get(i).getUser().getId(), manittos.get(0).getUser().getId(), roomId, idList.get(idx));
 			} else {
-				manittoRepository.updateManittoId(manittos.get(i).getUser().getId(), manittos.get(i + 1).getUser().getId(), roomId, i + 2);
+				manittoRepository.updateManittoId(manittos.get(i).getUser().getId(), manittos.get(i + 1).getUser().getId(), roomId, idList.get(idx));
 			}
+			idList.remove(idx);
 		}
 
 		roomRepository.updateStartRoom(roomId);

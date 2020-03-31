@@ -178,7 +178,7 @@ public class MissionService {
 		dashBoardResponse.setMissionCountOfAll((long)missionRepository.findByRoomId(roomId).size());
 		if(userStatus == UserStatus.User){
 			List<UserMissionResponse> list = getUserMission(userId, roomId).getData();
-			dashBoardResponse.setMissionCountOfUserSend(list.stream().filter(m-> m.getUserMission().getUserDone()==1).count());
+			dashBoardResponse.setMissionCountOfUserSend(list.stream().filter(m-> m.getUserMission().getUserDone()!=null).count());
 			dashBoardResponse.setMissionCountOfUserReceive((long)getUserReceiveMission(userId, roomId).getData().size());
 		}
 
