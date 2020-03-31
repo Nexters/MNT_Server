@@ -123,8 +123,8 @@ public class MissionService {
 	@Transactional
 	public ApiResponse<String> sendMission(UserMissionRequest mission) {
 		String fileName = null;
-		log.info(mission.toString());
 		mission.setDate(new Date());
+		log.info(mission.toString());
 		if (mission.getImg() != null) {
 			log.info(mission.toString());
 			try {
