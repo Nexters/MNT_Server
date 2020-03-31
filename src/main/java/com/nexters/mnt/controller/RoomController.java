@@ -2,6 +2,7 @@ package com.nexters.mnt.controller;
 
 import com.nexters.mnt.entity.*;
 import com.nexters.mnt.entity.dto.ManittoResponse;
+import com.nexters.mnt.entity.dto.UserResponse;
 import com.nexters.mnt.repository.UserRepository;
 import com.nexters.mnt.service.RoomService;
 import com.nexters.mnt.service.UserService;
@@ -87,7 +88,7 @@ public class RoomController {
 
     @ApiOperation(value = "사용자의 마니또 정보 가져오기")
     @RequestMapping(value = "/user/manitto", method = RequestMethod.GET)
-    public ApiResponse<User> getManitto(@RequestParam("roomId") Long roomId, @RequestParam("userId")  String userId){
+    public ApiResponse<UserResponse> getManitto(@RequestParam("roomId") Long roomId, @RequestParam("userId")  String userId){
         return roomService.getMyManitto(userId, roomId);
     }
 

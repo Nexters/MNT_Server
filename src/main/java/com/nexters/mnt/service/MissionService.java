@@ -139,7 +139,7 @@ public class MissionService {
 		}
 		try {
 			userMissionRepository.updateUserMission(mission, fileName);
-			User user = roomService.getMyManitto(mission.getUserId(), mission.getRoomId()).getData();
+			UserResponse user = roomService.getMyManitto(mission.getUserId(), mission.getRoomId()).getData();
 		} catch (Exception e) {
 			log.info(e.getMessage());
 			return new ApiResponse<>(null, ApiStatus.Fail);

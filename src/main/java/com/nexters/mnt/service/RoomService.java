@@ -82,7 +82,7 @@ public class RoomService {
 	@Transactional
 	public void removeUserFromRoom(Long roomId, String userId) {
 		manittoRepository.deleteByRoomIdAndUser(roomId, userId);
-//		userMissionRepository.deleteByUserIdAndRoomId(userId, roomId);
+		userMissionRepository.deleteByUserIdAndRoomId(userId, roomId);
 	}
 
 	public ApiResponse<List<ManittoResponse>> getUserList(Long roomId) {
@@ -139,9 +139,16 @@ public class RoomService {
 		roomRepository.updateEndRoom(roomId);
 	}
 
-	public ApiResponse<User> getMyManitto(String userId, Long roomId) {
-		String user = manittoRepository.findByRoomAndUser(userId, roomId).get().getManittoId();
-		return new ApiResponse<>(userRepository.findById(user).get(), ApiStatus.Ok);
+	public ApiResponse<UserResponse> getMyManitto(String userId, Long roomId) {
+		Manitto manitto = manittoRepository.findByRoomAndUser(userId, roomId).orElse(null);
+		if(manitto == null){
+			return new ApiResponse<>(null, ApiStatus.Fail);
+		}
+		User user = userRepository.findById(manitto.getManittoId()).get();
+		Integer fruttoId = manittoRepository.findByRoomAndUser(user.getId(), roomId).get().getFruttoId();
+		UserResponse userResponse = new UserResponse(user.getId(), user.getName(), fruttoId);
+		userResponse.setFcmToken(user.getFcmToken());
+		return new ApiResponse<>(userResponse ,ApiStatus.Ok);
 	}
 
 	public Manitto getManitto(String userId, Long roomId) {
