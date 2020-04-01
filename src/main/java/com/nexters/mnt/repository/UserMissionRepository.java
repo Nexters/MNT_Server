@@ -41,6 +41,7 @@ public interface UserMissionRepository extends JpaRepository<UserMission, Long> 
            ":roomId")
     List<UserMission> findByUserIdAndRoomId(@Param("userId") String userId, @Param("roomId") Long roomId);
 
+    @Modifying
     @Query("delete from UserMission u where u.userId.id = :userId and u.roomId = :roomId")
     void deleteByUserIdAndRoomId(@Param("userId") String userId, @Param("roomId") Long roomId);
 
