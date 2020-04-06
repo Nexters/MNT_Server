@@ -27,4 +27,6 @@ public class UserMissionResponse {
     private Long missionId;
     @ApiModelProperty(value = "미션 이름")
     private String missionName;
+    @ApiModelProperty(value = "이미지 유무")
+    private Integer isAbleImg;
 }

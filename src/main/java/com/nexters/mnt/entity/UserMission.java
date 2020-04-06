@@ -69,10 +69,11 @@ public class UserMission {
     }
 
     public UserMissionResponse convertToUserMissionResponse(ManittoResponse manitto){
-        return new UserMissionResponse(this, manitto.getUserFruttoId(), manitto.getManitto(), this.missionId.getId(), this.missionId.getName());
+        return new UserMissionResponse(this, manitto.getUserFruttoId(), manitto.getManitto(), this.missionId.getId(), this.missionId.getName(),
+                                       this.missionId.getIsAbleImg());
     }
 
     public UserMissionResponse convertToUserMissionResponse(){
-        return new UserMissionResponse(this, null, null, this.missionId.getId(), this.missionId.getName());
+        return new UserMissionResponse(this, null, null, this.missionId.getId(), this.missionId.getName(), this.missionId.getIsAbleImg());
     }
 }
