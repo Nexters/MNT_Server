@@ -79,7 +79,6 @@ public class RoomController {
         return roomService.startRoom(roomId);
     }
 
-
     @ApiOperation(value = "방 종료하기")
     @RequestMapping(value = "/room/end/{roomId}", method = RequestMethod.GET)
     public void endRoom(@PathVariable Long roomId){

@@ -1,24 +1,28 @@
 package com.nexters.mnt.service;
 
-import com.nexters.mnt.controller.ApiStatus;
-import com.nexters.mnt.entity.*;
-import com.nexters.mnt.entity.dto.ManittoResponse;
-import com.nexters.mnt.entity.dto.UserResponse;
-import com.nexters.mnt.repository.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import javax.transaction.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
+import com.nexters.mnt.controller.ApiStatus;
+import com.nexters.mnt.entity.ApiResponse;
+import com.nexters.mnt.entity.Manitto;
+import com.nexters.mnt.entity.Room;
+import com.nexters.mnt.entity.User;
+import com.nexters.mnt.entity.dto.ManittoResponse;
+import com.nexters.mnt.entity.dto.UserResponse;
+import com.nexters.mnt.repository.ManittoRepository;
+import com.nexters.mnt.repository.MissionRepository;
+import com.nexters.mnt.repository.RoomRepository;
+import com.nexters.mnt.repository.UserMissionRepository;
+import com.nexters.mnt.repository.UserRepository;
 
 @Service
 @Log4j2
@@ -82,8 +86,7 @@ public class RoomService {
 
 	@Transactional
 	public void removeUserFromRoom(Long roomId, String userId) {
-		manittoRepository.deleteByRoomIdAndUser(roomId, userId);
-		userMissionRepository.deleteByUserIdAndRoomId(userId, roomId);
+		manittoRepository.updateIsCreater(userId, roomId);
 	}
 
 	public ApiResponse<List<ManittoResponse>> getUserList(Long roomId) {

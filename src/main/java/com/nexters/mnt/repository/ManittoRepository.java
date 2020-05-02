@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public interface ManittoRepository extends JpaRepository<Manitto, Long> {
 
-    @Query(value = "select * from manitto_tb where user_TB_id= ?1", nativeQuery = true)
+    @Query(value = "select * from manitto_tb where user_TB_id= ?1 and is_creater != -1", nativeQuery = true)
     Optional<List<Manitto>> findByUser(@Param("userId") String userId);
 
     @Modifying
@@ -42,4 +42,8 @@ public interface ManittoRepository extends JpaRepository<Manitto, Long> {
 
     @Query(value = "select m from Manitto m where m.manittoId = :userId and m.room.id = :roomId")
     Optional<Manitto> findByManittoIdAndRoom(@Param("userId") String userId, @Param("roomId")Long roomId);
+
+    @Modifying
+    @Query("update Manitto m set m.isCreater = -1 where m.user.id = :userId and m.room.id = :roomId")
+    void updateIsCreater(@Param("userId") String userId, @Param("roomId")Long roomId);
 }
