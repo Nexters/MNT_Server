@@ -95,8 +95,8 @@ public class MissionService {
 		}
 		mission.setUserMissions(userMissionList);
 		missionRepository.save(mission);
-        /*firebaseUtil.sendFcmToAll(userMissionList.stream()
-        .map(UserMission::getUserId).map(User::getFcmToken).collect(Collectors.toList()),"마니또!", "테스트~!!" );*/
+        firebaseUtil.sendFcmToAll(userMissionList.stream()
+        .map(UserMission::getUserId).map(User::getFcmToken).collect(Collectors.toList()),"새로운 미션!", "새로운 미션이 만들어 졌어요!" );
 		return new ApiResponse<>("", ApiStatus.Ok);
 	}
 
@@ -140,11 +140,11 @@ public class MissionService {
 		try {
 			userMissionRepository.updateUserMission(mission, fileName);
 			UserResponse user = roomService.getMyManitto(mission.getUserId(), mission.getRoomId()).getData();
+			firebaseUtil.sendFcmUserToUser(user.getFcmToken(), "미션 수행!", "내 마니또가 미션을 수행했어요!");
 		} catch (Exception e) {
 			log.info(e.getMessage());
 			return new ApiResponse<>(null, ApiStatus.Fail);
 		}
-//        firebaseUtil.sendFcmUserToUser(user.getFcmToken(), "마니또!", "테스트~!!");
 		return new ApiResponse<>(null, ApiStatus.Ok);
 	}
 
