@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.nexters.mnt.controller.ApiStatus;
@@ -86,6 +87,11 @@ public class RoomService {
 
 	@Transactional
 	public void removeUserFromRoom(Long roomId, String userId) {
+		Room room = roomRepository.findById(roomId).get();
+		if(room.getIsStart() == 0) {
+			manittoRepository.deleteByRoomIdAndUser(roomId, userId);
+			return;
+		}
 		manittoRepository.updateIsCreater(userId, roomId);
 	}
 
@@ -167,7 +173,7 @@ public class RoomService {
 		return manittoRepository.findByRoomAndUser(userId, roomId).get();
 	}
 
-//	@Scheduled(cron = "0 0 12 * * *")
+	@Scheduled(cron = "0 0 12 * * *")
 	public void roomScheduler() {
 		List<Room> roomList = roomRepository.findRoomByStartDay();
 		List<String> fcmTokens = new ArrayList<>();
