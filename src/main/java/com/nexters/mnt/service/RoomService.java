@@ -3,6 +3,7 @@ package com.nexters.mnt.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -12,6 +13,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import com.nexters.mnt.common.FirebaseUtil;
 import com.nexters.mnt.controller.ApiStatus;
 import com.nexters.mnt.entity.ApiResponse;
 import com.nexters.mnt.entity.Manitto;
@@ -36,6 +38,7 @@ public class RoomService {
 	private final UserRepository userRepository;
 	private final UserMissionRepository userMissionRepository;
 	private final MissionRepository missionRepository;
+	private final FirebaseUtil firebaseUtil;
 
 	@Transactional
 	public ApiResponse<String> makeRoom(Room room, String userId) {
@@ -149,6 +152,8 @@ public class RoomService {
 			idList.remove(idx);
 		}
 
+		List<String> fcmTokens = manittos.stream().map(Manitto::getUser).map(User::getFcmToken).collect(Collectors.toList());
+		firebaseUtil.sendFcmToAll(fcmTokens, "마니또가 시작되었습니다!", "나의 프루또를 확인하세요!");
 		roomRepository.updateStartRoom(roomId);
 		return new ApiResponse<>(null, ApiStatus.Ok);
 	}
@@ -176,7 +181,6 @@ public class RoomService {
 	@Scheduled(cron = "0 0 12 * * *")
 	public void roomScheduler() {
 		List<Room> roomList = roomRepository.findRoomByStartDay();
-		List<String> fcmTokens = new ArrayList<>();
 		roomList.forEach(r ->startRoom(r.getId()));
 		roomRepository.updateStartRoomAuto();
 		roomRepository.updateEndRoomAuto();

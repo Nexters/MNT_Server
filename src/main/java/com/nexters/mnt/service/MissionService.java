@@ -82,6 +82,12 @@ public class MissionService {
 		return new ApiResponse<>(userMissionResponses, ApiStatus.Ok);
 	}
 
+	public ApiResponse getUserMission(Long userMissionId) {
+		UserMission mission = userMissionRepository.getOne(userMissionId);
+
+		return new ApiResponse(mission.convertToUserMissionResponse(), ApiStatus.Ok);
+	}
+
 	@Transactional
 	public ApiResponse<String> makeMission(MissionRequest missionRequest) {
 		List<ManittoResponse> users = roomService.getUserList(missionRequest.getRoomId()).getData();

@@ -63,9 +63,15 @@ public class MissionController {
         return missionService.sendMission(userMission);
     }
 
+    @ApiOperation(value = "미션 상세보기", notes = "사용자들이 수행한 미션 상세보기", response = UserMissionResponse.class)
+    @RequestMapping(value = "/{userMissionId}", method = RequestMethod.GET)
+    public ApiResponse<UserMissionResponse> getUserMission(@PathVariable Long userMissionId){
+        return missionService.getUserMission(userMissionId);
+    }
+
     @ApiOperation(value = "사용자의 미션 현황", notes = "사용자가 미션에 대한 수행 유무를 보여줍니다.")
     @RequestMapping(value = "/done/{userId}", method = RequestMethod.GET)
-    public ApiResponse<List<UserMissionResponse>> getUserMission(@PathVariable String userId, @RequestParam Long roomId){
+    public ApiResponse<List<UserMissionResponse>> getUserMissionList(@PathVariable String userId, @RequestParam Long roomId){
         return missionService.getUserMission(userId, roomId);
     }
 
