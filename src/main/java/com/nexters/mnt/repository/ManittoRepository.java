@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import javax.swing.text.html.Option;
+import javax.transaction.Transactional;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -34,6 +36,7 @@ public interface ManittoRepository extends JpaRepository<Manitto, Long> {
     Optional<Manitto> findByRoomAndUser(@Param("userId")String userId, @Param("roomId")Long roomId);
 
     @Modifying
+    @Transactional
     @Query("delete from Manitto where room.id = :roomId and user.id = :userId")
     void deleteByRoomIdAndUser(@Param("roomId") Long roomId, @Param("userId") String userId);
 
@@ -44,6 +47,7 @@ public interface ManittoRepository extends JpaRepository<Manitto, Long> {
     Optional<Manitto> findByManittoIdAndRoom(@Param("userId") String userId, @Param("roomId")Long roomId);
 
     @Modifying
+    @Transactional
     @Query("update Manitto m set m.isCreater = -1 where m.user.id = :userId and m.room.id = :roomId")
     void updateIsCreater(@Param("userId") String userId, @Param("roomId")Long roomId);
 }

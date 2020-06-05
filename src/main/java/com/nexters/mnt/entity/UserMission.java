@@ -29,7 +29,6 @@ public class UserMission {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @JsonIgnore
     @Column(name="id")
     private Long id;
 
